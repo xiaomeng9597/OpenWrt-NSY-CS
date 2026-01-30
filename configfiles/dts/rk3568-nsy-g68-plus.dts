@@ -9,6 +9,9 @@
 #include <dt-bindings/soc/rockchip,vop2.h>
 #include <dt-bindings/pinctrl/rockchip.h>
 #include "rk3568.dtsi"
+#include "rk3568-vngpu-rk809.dtsi"
+#include "rk3568-vngpu.dtsi"
+#include "rk3568-ramoops.dtsi"
 
 / {
 	model = "NSY-G68 AX3000 Router";
@@ -227,26 +230,67 @@
 		vin-supply = <&vcc5v0_sys>;
 	};
 
-	vcc_camera: vcc-camera-regulator {
-		compatible = "regulator-fixed";
-		gpio = <&gpio0 RK_PC1 GPIO_ACTIVE_HIGH>;
-		pinctrl-names = "default";
-		pinctrl-0 = <&camera_pwr>;
-		regulator-name = "vcc_camera";
-		enable-active-high;
+	vdd_logic: vdd-logic {
+		compatible = "pwm-regulator";
+		rockchip,pwm_id = <2>;
+		pwms = <&pwm2 0 25000 1>;
+		pwm-dutycycle-range = <0 100>;
+		regulator-name = "vdd_logic";
+		regulator-min-microvolt = <500000>;
+		regulator-max-microvolt = <1350000>;
+		regulator-init-microvolt = <900000>;
+		regulator-settling-time-up-us = <250>;
+		regulator-enable-ramp-delay = <300>;
+		regulator-ramp-delay = <8000>;
 		regulator-always-on;
 		regulator-boot-on;
+		vin-supply = <&vcc3v3_sys>;
+	};
+
+	vdd_npu: vdd-npu {
+		compatible = "pwm-regulator";
+		rockchip,pwm_id = <1>;
+		pwms = <&pwm1 0 25000 1>;
+		pwm-dutycycle-range = <0 100>;
+		regulator-name = "vdd_npu";
+		regulator-min-microvolt = <500000>;
+		regulator-max-microvolt = <1350000>;
+		regulator-init-microvolt = <900000>;
+		regulator-settling-time-up-us = <250>;
+		regulator-enable-ramp-delay = <300>;
+		regulator-ramp-delay = <8000>;
+		regulator-always-on;
+		regulator-boot-on;
+		vin-supply = <&vcc3v3_sys>;
+	};
+
+	vdd_gpu: vdd-gpu {
+		compatible = "pwm-regulator";
+		rockchip,pwm_id = <3>;
+		pwms = <&pwm3 0 25000 1>;
+		pwm-dutycycle-range = <0 100>;
+		regulator-name = "vdd_gpu";
+		regulator-min-microvolt = <500000>;
+		regulator-max-microvolt = <1350000>;
+		regulator-init-microvolt = <1000000>;
+		regulator-settling-time-up-us = <250>;
+		regulator-enable-ramp-delay = <300>;
+		regulator-ramp-delay = <8000>;
+		regulator-always-on;
+		regulator-boot-on;
+		vin-supply = <&vcc3v3_sys>;
 	};
 
 	vdd_cpu: vdd-cpu {
 		compatible = "pwm-regulator";
 		rockchip,pwm_id = <0>;
-		rockchip,pwm_voltage = <900000>;
 		pwms = <&pwm0 0 25000 1>;
+		pwm-dutycycle-range = <0 100>;
 		regulator-name = "vdd_cpu";
 		regulator-min-microvolt = <800000>;
 		regulator-max-microvolt = <1400000>;
 		regulator-init-microvolt = <1150000>;
+		regulator-settling-time-up-us = <250>;
 		regulator-enable-ramp-delay = <300>;
 		regulator-ramp-delay = <8000>;
 		regulator-always-on;
@@ -326,9 +370,6 @@
 		interrupts = <RK_PA3 IRQ_TYPE_LEVEL_LOW>;
 		pinctrl-names = "default", "pmic-sleep", "pmic-power-off", "pmic-reset";
 		pinctrl-0 = <&pmic_int>;
-		pinctrl-1 = <&soc_slppin_slp &rk817_slppin_slp>;
-		pinctrl-2 = <&soc_slppin_gpio &rk817_slppin_pwrdn>;
-		pinctrl-3 = <&soc_slppin_gpio &rk817_slppin_rst>;
 		rockchip,system-power-controller;
 		wakeup-source;
 		#clock-cells = <1>;
@@ -345,66 +386,7 @@
 		vcc8-supply = <&vcc3v3_sys>;
 		vcc9-supply = <&vcc3v3_sys>;
 
-		pwrkey {
-			status = "okay";
-		};
-
-		pinctrl_rk8xx: pinctrl_rk8xx {
-			gpio-controller;
-			#gpio-cells = <2>;
-
-			rk817_slppin_null: rk817_slppin_null {
-				pins = "gpio_slp";
-				function = "pin_fun0";
-			};
-
-			rk817_slppin_slp: rk817_slppin_slp {
-				pins = "gpio_slp";
-				function = "pin_fun1";
-			};
-
-			rk817_slppin_pwrdn: rk817_slppin_pwrdn {
-				pins = "gpio_slp";
-				function = "pin_fun2";
-			};
-
-			rk817_slppin_rst: rk817_slppin_rst {
-				pins = "gpio_slp";
-				function = "pin_fun3";
-			};
-		};
-
 		regulators {
-
-			vdd_logic: DCDC_REG1 {
-				regulator-always-on;
-				regulator-boot-on;
-				regulator-min-microvolt = <500000>;
-				regulator-max-microvolt = <1350000>;
-				regulator-init-microvolt = <900000>;
-				regulator-ramp-delay = <6001>;
-				regulator-initial-mode = <2>;
-				regulator-name = "vdd_logic";
-
-				regulator-state-mem {
-					regulator-off-in-suspend;
-				};
-			};
-
-			vdd_gpu: DCDC_REG2 {
-				regulator-always-on;
-				regulator-boot-on;
-				regulator-min-microvolt = <500000>;
-				regulator-max-microvolt = <1350000>;
-				regulator-init-microvolt = <1000000>;
-				regulator-ramp-delay = <6001>;
-				regulator-initial-mode = <2>;
-				regulator-name = "vdd_gpu";
-
-				regulator-state-mem {
-					regulator-off-in-suspend;
-				};
-			};
 
 			vcc_ddr: DCDC_REG3 {
 				regulator-always-on;
@@ -414,21 +396,6 @@
 
 				regulator-state-mem {
 					regulator-on-in-suspend;
-				};
-			};
-
-			vdd_npu: DCDC_REG4 {
-				regulator-always-on;
-				regulator-boot-on;
-				regulator-min-microvolt = <500000>;
-				regulator-max-microvolt = <1350000>;
-				regulator-init-microvolt = <1000000>;
-				regulator-ramp-delay = <6001>;
-				regulator-initial-mode = <2>;
-				regulator-name = "vdd_npu";
-
-				regulator-state-mem {
-					regulator-off-in-suspend;
 				};
 			};
 
@@ -599,9 +566,6 @@
 		vcc3v3_vga_en: vcc3v3-vga-en {
 			rockchip,pins = <0 RK_PD5 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
-		camera_pwr: camera-pwr {
-			rockchip,pins = <0 RK_PC1 RK_FUNC_GPIO &pcfg_pull_none>;
-		};
 		vcc3v3_pcie_en: vcc3v3-pcie-en {
 			rockchip,pins = <0 RK_PD4 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
@@ -618,15 +582,7 @@
 		pmic_int: pmic-intl {
 			rockchip,pins = <0 RK_PA3 RK_FUNC_GPIO &pcfg_pull_up>;
 		};
-	
-		soc_slppin_gpio: soc-slppin-gpio {
-			rockchip,pins = <0 RK_PA2 0 &pcfg_output_low>;
-		};
-	
-		soc_slppin_slp:soc-slppin-slp {
-			rockchip,pins = <0 RK_PA2 1 &pcfg_pull_none>;
-		};
-	
+
 		soc_slppin_rst {
 			rockchip,pins = <0 RK_PA2 2 &pcfg_pull_none>;
 		};
@@ -707,9 +663,10 @@
 &pcie3x2 {
 		vpcie3v3-supply = <&vcc3v3_pcie>;
 		reset-gpios = <&gpio0 RK_PC6 GPIO_ACTIVE_HIGH>;
-		status = "okay";
 		num-lanes = <0x1>;
 		pinctrl-0 = <&pcie30x2_reset_h>;
+		rockchip,perst-inactive-ms = <500>;
+		status = "okay";
 };
 
 &pcie30phy {
@@ -893,15 +850,18 @@
 };
 
 &pwm1 {
+	pinctrl-names = "default";
 	status = "okay";
 };
 
 &pwm2 {
-	status = "disable";
+	pinctrl-names = "default";
+	status = "okay";
 };
 
 &pwm3 {
-	status = "disable";
+	pinctrl-names = "default";
+	status = "okay";
 };
 
 &power {
@@ -909,11 +869,21 @@
 };
 
 &gpu {
+	operating-points-v2 = <&gpu_opp_table>;
+	power-off-delay-ms = <20>;
 	mali-supply = <&vdd_gpu>;
 	status = "okay";
 };
 
 &vpu {
+	status = "okay";
+};
+
+&vdpu {
+	status = "okay";
+};
+
+&vdpu_mmu {
 	status = "okay";
 };
 
@@ -925,7 +895,58 @@
 	status = "okay";
 };
 
+&vepu_mmu {
+	status = "okay";
+};
+
 &vop {
+	status = "okay";
+};
+
+&rkvdec {
+	operating-points-v2 = <&rkvdec_opp_table>;
+	vdec-supply = <&vdd_logic>;
+	status = "okay";
+	
+	/* 补全复位信号名称 */
+	resets = <&cru SRST_A_RKVDEC>, <&cru SRST_H_RKVDEC>,
+			 <&cru SRST_RKVDEC_CA>, <&cru SRST_RKVDEC_CORE>,
+			 <&cru SRST_RKVDEC_HEVC_CA>,
+			 <&cru SRST_A_VPU_NIU>, <&cru SRST_H_VPU_NIU>;
+	
+	reset-names = "video_a", "video_h", "video_cabac",
+					"video_core", "video_hevc_cabac",
+					"shared_niu_a", "shared_niu_h";
+};
+
+&rkvdec_mmu {
+	status = "okay";
+};
+
+&rkvenc {
+	operating-points-v2 = <&rkvenc_opp_table>;
+	venc-supply = <&vdd_logic>;
+	status = "okay";
+};
+
+&rkvenc_mmu {
+	status = "okay";
+};
+
+&rknpu {
+	operating-points-v2 = <&npu_opp_table>;
+	rknpu-supply = <&vdd_npu>;
+	status = "okay";
+};
+
+&rknpu_mmu {
+	status = "okay";
+};
+
+&bus_npu {
+	operating-points-v2 = <&bus_npu_opp_table>;
+	bus-supply = <&vdd_logic>;
+	pvtm-supply = <&vdd_cpu>;
 	status = "okay";
 };
 
@@ -1048,4 +1069,24 @@
 &saradc {
 	status = "okay";
 	vref-supply = <&vcc1v8_adc>;
+};
+
+&mpp_srv {
+	status = "okay";
+};
+
+&iep {
+	status = "okay";
+};
+
+&iep_mmu {
+	status = "okay";
+};
+
+&jpegd {
+	status = "okay";
+};
+
+&jpegd_mmu {
+	status = "okay";
 };

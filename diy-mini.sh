@@ -180,10 +180,7 @@ cp -f $GITHUB_WORKSPACE/configfiles/swconfig_install package/base-files/files/et
 chmod 755 package/base-files/files/etc/init.d/swconfig_install
 
 
-cp -f $GITHUB_WORKSPACE/configfiles/dts/rk3568-nsy-g68-plus.dts target/linux/rockchip/files/arch/arm64/boot/dts/rockchip/rk3568-nsy-g68-plus.dts
-cp -f $GITHUB_WORKSPACE/configfiles/dts/rk3568-nsy-g16-plus.dts target/linux/rockchip/files/arch/arm64/boot/dts/rockchip/rk3568-nsy-g16-plus.dts
-cp -f $GITHUB_WORKSPACE/configfiles/dts/rk3568-bdy-g18-pro.dts target/linux/rockchip/files/arch/arm64/boot/dts/rockchip/rk3568-bdy-g18-pro.dts
-cp -f $GITHUB_WORKSPACE/configfiles/dts/rk3588-orangepi-5-plus.dts target/linux/rockchip/files/arch/arm64/boot/dts/rockchip/rk3588-orangepi-5-plus.dts
+cp -a $GITHUB_WORKSPACE/configfiles/dts/* target/linux/rockchip/files/arch/arm64/boot/dts/rockchip/
 
 
 # 集成 nsy_g68-plus WiFi驱动
