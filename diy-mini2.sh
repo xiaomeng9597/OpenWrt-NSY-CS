@@ -140,7 +140,7 @@ echo -e "\\ndefine Device/nsy_g68-plus
   DEVICE_VENDOR := NSY
   DEVICE_MODEL := G68
   SOC := rk3568
-  DEVICE_DTS := rockchip/rk3568-nsy-g68-plus
+  DEVICE_DTS := rk3568-nsy-g68-plus
   SUPPORTED_DEVICES := nsy,g68-plus
   UBOOT_DEVICE_NAME := generic-rk3568
   IMAGE/sysupgrade.img.gz := boot-common | boot-script | pine64-img | gzip | append-metadata
@@ -153,7 +153,7 @@ echo -e "\\ndefine Device/nsy_g16-plus
   DEVICE_VENDOR := NSY
   DEVICE_MODEL := G16
   SOC := rk3568
-  DEVICE_DTS := rockchip/rk3568-nsy-g16-plus
+  DEVICE_DTS := rk3568-nsy-g16-plus
   SUPPORTED_DEVICES := nsy,g16-plus
   UBOOT_DEVICE_NAME := generic-rk3568
   IMAGE/sysupgrade.img.gz := boot-common | boot-script | pine64-img | gzip | append-metadata
@@ -166,7 +166,7 @@ echo -e "\\ndefine Device/bdy_g18-pro
   DEVICE_VENDOR := BDY
   DEVICE_MODEL := G18
   SOC := rk3568
-  DEVICE_DTS := rockchip/rk3568-bdy-g18-pro
+  DEVICE_DTS := rk3568-bdy-g18-pro
   SUPPORTED_DEVICES := bdy,g18-pro
   UBOOT_DEVICE_NAME := generic-rk3568
   IMAGE/sysupgrade.img.gz := boot-common | boot-script | pine64-img | gzip | append-metadata
@@ -180,10 +180,8 @@ cp -f $GITHUB_WORKSPACE/configfiles/swconfig_install package/base-files/files/et
 chmod 755 package/base-files/files/etc/init.d/swconfig_install
 
 
-mkdir -p build_dir/target-aarch64_generic_musl/linux-rockchip_armv8/linux-6.12.63/arch/arm64/boot/dts/rockchip
 cp -a $GITHUB_WORKSPACE/configfiles/dts/* target/linux/rockchip/files/arch/arm64/boot/dts/rockchip/
-cp -a $GITHUB_WORKSPACE/configfiles/dts/* build_dir/target-aarch64_generic_musl/linux-rockchip_armv8/linux-6.12.63/arch/arm64/boot/dts/rockchip/
-ls build_dir/target-aarch64_generic_musl/linux-rockchip_armv8/linux-6.12.63/arch/arm64/boot/dts/rockchip
+ls target/linux/rockchip/files/arch/arm64/boot/dts/rockchip/
 
 
 # rtl8367b驱动资源包，暂时使用这样替换
