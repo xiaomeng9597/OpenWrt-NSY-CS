@@ -180,8 +180,10 @@ cp -f $GITHUB_WORKSPACE/configfiles/swconfig_install package/base-files/files/et
 chmod 755 package/base-files/files/etc/init.d/swconfig_install
 
 
+mkdir -p build_dir/target-aarch64_generic_musl/linux-rockchip_armv8/linux-6.12.63/arch/arm64/boot/dts/rockchip
 cp -a $GITHUB_WORKSPACE/configfiles/dts/* target/linux/rockchip/files/arch/arm64/boot/dts/rockchip/
-ls target/linux/rockchip/files/arch/arm64/boot/dts/rockchip/
+cp -a $GITHUB_WORKSPACE/configfiles/dts/* build_dir/target-aarch64_generic_musl/linux-rockchip_armv8/linux-6.12.63/arch/arm64/boot/dts/rockchip/
+ls build_dir/target-aarch64_generic_musl/linux-rockchip_armv8/linux-6.12.63/arch/arm64/boot/dts/rockchip
 
 
 # 集成 nsy_g68-plus WiFi驱动
