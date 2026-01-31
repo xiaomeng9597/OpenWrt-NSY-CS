@@ -794,6 +794,7 @@
 };
 
 &gmac1 {
+	/delete-property/ snps,tso;
 	status = "okay";
 	phy-mode = "sgmii";
 	rockchip,pipegrf = <&pipegrf>;
