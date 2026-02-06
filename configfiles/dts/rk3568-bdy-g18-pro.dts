@@ -607,7 +607,7 @@
 	};
 
 	pmic {
-		pmic_int: pmic-intl {
+		pmic_int: pmic-int {
 			rockchip,pins = <0 RK_PA3 RK_FUNC_GPIO &pcfg_pull_up>;
 		};
 	};
@@ -903,8 +903,9 @@
 	status = "okay";
 };
 
+# vdpu节点与vpu节点互斥冲突不能同时开启
 &vdpu {
-	status = "okay";
+	status = "disabled";
 };
 
 &vdpu_mmu {
