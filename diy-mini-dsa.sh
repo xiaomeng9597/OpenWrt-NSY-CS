@@ -133,7 +133,7 @@ cp -f $GITHUB_WORKSPACE/configfiles/02_network-dsa target/linux/rockchip/armv8/b
 
 
 # cp -f $GITHUB_WORKSPACE/configfiles/uboot-Makefile package/boot/uboot-rockchip/Makefile
-grep -q 'seewo_sv21 \\$' package/boot/uboot-rockchip/Makefile && sed -i "s/seewo_sv21 \\\\/seewo_sv21 \\\\\n    nsy_g68-plus \\\\\n    nsy_g16-plus \\\\\n    bdy_g18-pro \\\\/g" package/boot/uboot-rockchip/Makefile || sed -i "s/seewo_sv21/seewo_sv21 \\\\\n    nsy_g68-plus/g" package/boot/uboot-rockchip/Makefile
+grep -q 'seewo_sv21 \\$' package/boot/uboot-rockchip/Makefile && sed -i "s/seewo_sv21 \\\\/seewo_sv21 \\\\\n    nsy_g68-plus \\\\\n    nsy_g16-plus \\\\\n    bdy_g18-pro \\\\/g" package/boot/uboot-rockchip/Makefile || sed -i "s/seewo_sv21/seewo_sv21 \\\\\n    nsy_g68-plus \\\\\n    nsy_g16-plus \\\\\n    bdy_g18-pro/g" package/boot/uboot-rockchip/Makefile
 
 
 echo -e "\\ndefine Device/nsy_g68-plus
@@ -144,9 +144,35 @@ echo -e "\\ndefine Device/nsy_g68-plus
   SUPPORTED_DEVICES := nsy,g68-plus
   UBOOT_DEVICE_NAME := generic-rk3568
   IMAGE/sysupgrade.img.gz := boot-common | boot-script | pine64-img | gzip | append-metadata
-  DEVICE_PACKAGES := kmod-gpio-button-hotplug kmod-nvme kmod-scsi-core kmod-hwmon-pwmfan kmod-thermal dsa-realtek dsa-rtl8365mb kmod-r8168
+  DEVICE_PACKAGES := kmod-gpio-button-hotplug kmod-nvme kmod-scsi-core kmod-hwmon-pwmfan kmod-thermal dsa-realtek dsa-rtl8365mb kmod-r8168 kmod-mt7916-firmware
 endef
 TARGET_DEVICES += nsy_g68-plus" >> target/linux/rockchip/image/armv8.mk
+
+
+echo -e "\\ndefine Device/nsy_g16-plus
+  DEVICE_VENDOR := NSY
+  DEVICE_MODEL := G16
+  SOC := rk3568
+  DEVICE_DTS := rk3568-nsy-g16-plus
+  SUPPORTED_DEVICES := nsy,g16-plus
+  UBOOT_DEVICE_NAME := generic-rk3568
+  IMAGE/sysupgrade.img.gz := boot-common | boot-script | pine64-img | gzip | append-metadata
+  DEVICE_PACKAGES := kmod-gpio-button-hotplug kmod-nvme kmod-scsi-core kmod-hwmon-pwmfan kmod-thermal dsa-realtek dsa-rtl8365mb kmod-r8168 kmod-mt7615-firmware
+endef
+TARGET_DEVICES += nsy_g16-plus" >> target/linux/rockchip/image/armv8.mk
+
+
+echo -e "\\ndefine Device/bdy_g18-pro
+  DEVICE_VENDOR := BDY
+  DEVICE_MODEL := G18
+  SOC := rk3568
+  DEVICE_DTS := rk3568-bdy-g18-pro
+  SUPPORTED_DEVICES := bdy,g18-pro
+  UBOOT_DEVICE_NAME := generic-rk3568
+  IMAGE/sysupgrade.img.gz := boot-common | boot-script | pine64-img | gzip | append-metadata
+  DEVICE_PACKAGES := kmod-gpio-button-hotplug kmod-nvme kmod-scsi-core kmod-hwmon-pwmfan kmod-thermal dsa-realtek dsa-rtl8365mb kmod-r8168 kmod-mt7615-firmware
+endef
+TARGET_DEVICES += bdy_g18-pro" >> target/linux/rockchip/image/armv8.mk
 
 
 # 追加自定义内核配置项
@@ -162,10 +188,15 @@ CONFIG_NET_DSA_REALTEK_RTL8366RB=n
 CONFIG_NET_DSA_TAG_RTL8_4=y" >> target/linux/rockchip/armv8/config-6.12
 
 
-cp -a $GITHUB_WORKSPACE/configfiles/dts/* target/linux/rockchip/files/arch/arm64/boot/dts/rockchip/
-rm -rf target/linux/rockchip/files/arch/arm64/boot/dts/rockchip/rk3568-nsy-g68-plus.dts
-mv target/linux/rockchip/files/arch/arm64/boot/dts/rockchip/rk3568-nsy-g68-plus-dsa.dts target/linux/rockchip/files/arch/arm64/boot/dts/rockchip/rk3568-nsy-g68-plus.dts
+cp -a $GITHUB_WORKSPACE/configfiles/dts/dsa/* target/linux/rockchip/files/arch/arm64/boot/dts/rockchip/
 ls target/linux/rockchip/files/arch/arm64/boot/dts/rockchip/
+
+
+# 集成 nsy_g68-plus WiFi驱动
+mkdir -p package/base-files/files/lib/firmware/mediatek
+cp -f $GITHUB_WORKSPACE/configfiles/WirelessDriver/mt7916_eeprom.bin package/base-files/files/lib/firmware/mediatek/mt7916_eeprom.bin
+cp -f $GITHUB_WORKSPACE/configfiles/WirelessDriver/mt7916_eeprom_backup.bin package/base-files/files/lib/firmware/mediatek/mt7916_eeprom_backup.bin
+# 适配机型代码结束
 
 
 # 定时限速插件

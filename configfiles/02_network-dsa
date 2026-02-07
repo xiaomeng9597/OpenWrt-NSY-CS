@@ -74,8 +74,12 @@ rockchip_setup_interfaces()
 	radxa,e54c)
 		ucidef_set_interfaces_lan_wan 'lan1 lan2 lan3' 'wan'
 		;;
-	nsy,g68-plus)
+	nsy,g68-plus|\
+	bdy,g18-pro)
 		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3 lan4" "wan"
+		;;
+	nsy,g16-plus)
+		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3" "wan"
 		;;
 	*)
 		ucidef_set_interface_lan 'eth0'
