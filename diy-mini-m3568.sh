@@ -128,7 +128,7 @@ chmod 755 package/base-files/files/bin/coremark.sh
 
 
 # 复制 02_network 网络配置文件到 target/linux/rockchip/armv8/base-files/etc/board.d/ 目录下
-cp -f $GITHUB_WORKSPACE/configfiles/02_network-dsa target/linux/rockchip/armv8/base-files/etc/board.d/02_network
+cp -f $GITHUB_WORKSPACE/configfiles/02_network target/linux/rockchip/armv8/base-files/etc/board.d/02_network
 
 
 # cp -f $GITHUB_WORKSPACE/configfiles/uboot-Makefile package/boot/uboot-rockchip/Makefile
