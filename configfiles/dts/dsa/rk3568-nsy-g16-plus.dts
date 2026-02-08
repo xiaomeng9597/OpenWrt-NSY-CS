@@ -800,6 +800,7 @@
 };
 
 &gmac1 {
+	/delete-property/ snps,tso;
 	status = "disabled";
 	phy-mode = "rgmii";
 	rockchip,pipegrf = <&pipegrf>;
