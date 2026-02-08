@@ -32,7 +32,7 @@
   	chosen: chosen {
     		stdout-path = "serial2:1500000n8";
   	};
- 
+
 	reserved-memory {
 		#address-cells = <2>;
 		#size-cells = <2>;
@@ -47,7 +47,7 @@
 
 		mpp_reserved: mpp-reserved {
 			compatible = "shared-dma-pool";
-			reusable;
+			no-map;
 			size = <0x0 0x10000000>; /* 256MB */
 		};
 	};

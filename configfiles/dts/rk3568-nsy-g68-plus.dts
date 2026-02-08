@@ -40,7 +40,7 @@
 
 		mpp_reserved: mpp-reserved {
 			compatible = "shared-dma-pool";
-			reusable;
+			no-map;
 			size = <0x0 0x10000000>; /* 256MB */
 		};
 	};
