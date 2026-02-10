@@ -34,14 +34,14 @@
 		linux,cma {
 			compatible = "shared-dma-pool";
 			reusable;
-			size = <0 0x10000000>; /* 256MB */
+			size = <0x0 0x10000000>; /* 256MB */
 			linux,cma-default;
 		};
 
 		mpp_reserved: mpp-reserved {
 			compatible = "shared-dma-pool";
 			no-map;
-			size = <0 0x8000000>; /* 128MB */
+			size = <0x0 0x8000000>; /* 128MB */
 		};
 	};
 
