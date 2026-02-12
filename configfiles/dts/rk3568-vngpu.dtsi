@@ -161,6 +161,7 @@
 		operating-points-v2 = <&gpu_opp_table>;
 		rockchip,pvtm-enable = <0>;
 		devfreq-governor = "simple_ondemand";
+
 		status = "disabled";
 		gpu_power_model: power-model {
 			compatible = "arm,mali-simple-power-model";
