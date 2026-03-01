@@ -195,8 +195,6 @@ tar -xvf rtl8367b-lede.tar.gz
 # 适配机型代码结束
 
 
-
-
 # 定时限速插件
 git clone --depth=1 https://github.com/sirpdboy/luci-app-eqosplus package/luci-app-eqosplus
 

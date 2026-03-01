@@ -133,7 +133,7 @@ cp -f $GITHUB_WORKSPACE/configfiles/02_network-dsa target/linux/rockchip/armv8/b
 
 
 # cp -f $GITHUB_WORKSPACE/configfiles/uboot-Makefile package/boot/uboot-rockchip/Makefile
-grep -q 'seewo_sv21 \\$' package/boot/uboot-rockchip/Makefile && sed -i "s/seewo_sv21 \\\\/seewo_sv21 \\\\\n    nsy_g68-plus \\\\\n    nsy_g16-plus \\\\\n    bdy_g18-pro \\\\/g" package/boot/uboot-rockchip/Makefile || sed -i "s/seewo_sv21/seewo_sv21 \\\\\n    nsy_g68-plus \\\\\n    nsy_g16-plus \\\\\n    bdy_g18-pro/g" package/boot/uboot-rockchip/Makefile
+grep -q 'seewo_sv21 \\$' package/boot/uboot-rockchip/Makefile && sed -i "s/seewo_sv21 \\\\/seewo_sv21 \\\\\n    nsy_g68-plus \\\\\n    nsy_g16-plus \\\\\n    bdy_g18-pro \\\\\n    bdy_g15-plus \\\\/g" package/boot/uboot-rockchip/Makefile || sed -i "s/seewo_sv21/seewo_sv21 \\\\\n    nsy_g68-plus \\\\\n    nsy_g16-plus \\\\\n    bdy_g18-pro \\\\\n    bdy_g15-plus/g" package/boot/uboot-rockchip/Makefile
 
 
 echo -e "\\ndefine Device/nsy_g68-plus
@@ -173,6 +173,19 @@ echo -e "\\ndefine Device/bdy_g18-pro
   DEVICE_PACKAGES := kmod-gpio-button-hotplug kmod-nvme kmod-scsi-core kmod-hwmon-pwmfan kmod-thermal kmod-dsa-rtl8365mb kmod-r8168 kmod-mt7615-firmware
 endef
 TARGET_DEVICES += bdy_g18-pro" >> target/linux/rockchip/image/armv8.mk
+
+
+echo -e "\\ndefine Device/bdy_g15-plus
+  DEVICE_VENDOR := BDY
+  DEVICE_MODEL := G15
+  SOC := rk3568
+  DEVICE_DTS := rk3568-bdy-g15-plus
+  SUPPORTED_DEVICES := bdy,g15-plus
+  UBOOT_DEVICE_NAME := generic-rk3568
+  IMAGE/sysupgrade.img.gz := boot-common | boot-script | pine64-img | gzip | append-metadata
+  DEVICE_PACKAGES := kmod-gpio-button-hotplug kmod-nvme kmod-scsi-core kmod-hwmon-pwmfan kmod-thermal kmod-dsa-rtl8365mb kmod-r8168
+endef
+TARGET_DEVICES += bdy_g15-plus" >> target/linux/rockchip/image/armv8.mk
 
 
 # 追加自定义内核配置项
